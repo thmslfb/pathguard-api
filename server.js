@@ -3,9 +3,9 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const morgan = require("morgan");
-const infoRoutes = require("./routes/info");
-const healthRoutes = require("./routes/health");
-const kycRoutes = require("./routes/kyc");
+const infoRoutes = require("./routes/info-routes");
+const healthRoutes = require("./routes/health-routes");
+const kycRoutes = require("./routes/kyc-routes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
