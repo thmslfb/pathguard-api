@@ -3,6 +3,9 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const morgan = require("morgan");
+const infoRoutes = require("./routes/info");
+const healthRoutes = require("./routes/health");
+const kycRoutes = require("./routes/kyc");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -12,28 +15,12 @@ app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 
-app.get("/api/v1", (req, res) => {
-  res.json({
-    message: "Welcome to PathGuard API.",
-    version: "^1.0.0",
-    endpoints: {
-      health: "/health",
-      kyc: "/api/v1/kyc",
-      docs: "/api/v1/docs",
-    },
-  });
-});
+app.use("/api/v1", infoRoutes);
+app.use("/health", healthRoutes);
+app.use("/api/v1/kyc", kycRoutes);
 
-app.get("/health", (req, res) => {
-  res.json({ status: "ok", timestamp: Date.now() });
-});
-
-app.get("/api/v1/kyc", (req, res) => {
-  res.json({
-    message: "KYC verification endpoint - to be implemented.",
-    methods: ["POST"],
-    documentation: "/api/v1/docs#kyc",
-  });
+app.get("/", (req, res) => {
+  res.redirect("/api/v1");
 });
 
 app.use((req, res) => {
