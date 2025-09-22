@@ -4,7 +4,7 @@ const EMAIL_INVALID_PENALTY = 0.3;
 const DOCUMENT_INVALID_PENALTY = 0.5;
 const ALLOWED_DOCUMENT_TYPES = ["passport", "id_card", "driver_license"];
 
-function calculateRiskScore(data) {
+const calculateRiskScore = (data) => {
   let score = 0;
 
   if (!data.name || data.name.length < MIN_NAME_LENGTH)
@@ -18,6 +18,6 @@ function calculateRiskScore(data) {
   if (score > 1) score = 1;
 
   return Math.round(score * 1000) / 1000;
-}
+};
 
 module.exports = calculateRiskScore;
