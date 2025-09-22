@@ -1,3 +1,4 @@
+const createVerification = require("../models/verification-model");
 const calculateRiskScore = require("../utils/risk-scoring");
 
 const LOW_THRESHOLD = parseFloat(process.env.LOW_THRESHOLD) || 0.2;
@@ -37,7 +38,11 @@ exports.verify = async (req, res, next) => {
 
     const verificationId = `ver_${Date.now()}`;
 
-    // TODO : Save to database
+    await createVerification({
+      verification_id: verificationId,
+      status,
+      score: riskScore,
+    });
 
     const responseObject = {
       verification_id: verificationId,
