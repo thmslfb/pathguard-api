@@ -1,6 +1,9 @@
 const express = require("express");
-const router = express.Router();
 const { verify } = require("../controllers/kyc-controller");
+const validateBody = require("../middleware/validation");
+const verificationSchema = require("../schemas/verification-schema");
+
+const router = express.Router();
 
 router.get("/", (req, res) => {
   res.json({
@@ -10,6 +13,6 @@ router.get("/", (req, res) => {
   });
 });
 
-router.post("/verify", verify);
+router.post("/verify", validateBody(verificationSchema), verify);
 
 module.exports = router;
