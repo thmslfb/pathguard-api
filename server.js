@@ -6,6 +6,8 @@ const morgan = require("morgan");
 const infoRoutes = require("./routes/info-routes");
 const healthRoutes = require("./routes/health-routes");
 const kycRoutes = require("./routes/kyc-routes");
+const notFoundHandler = require("./middleware/not-found-handler");
+const errorHandler = require("./middleware/error-handler");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -23,13 +25,7 @@ app.get("/", (req, res) => {
   res.redirect("/api/v1");
 });
 
-app.use((req, res) => {
-  res.status(404).json({ error: "Endpoint not found" });
-});
-
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: "Internal server error" });
-});
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
