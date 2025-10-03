@@ -1,7 +1,7 @@
 const db = require("../database/connection");
 const verifications = require("../database/schema");
 
-const createVerifications = async ({ verification_id, status, score }) => {
+const createVerification = async ({ verification_id, status, score }) => {
   return await db
     .insert(verifications)
     .values({
@@ -12,4 +12,4 @@ const createVerifications = async ({ verification_id, status, score }) => {
     .returning();
 };
 
-module.exports = { createVerifications };
+module.exports = { createVerification };

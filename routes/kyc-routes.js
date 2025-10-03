@@ -1,5 +1,5 @@
 const express = require("express");
-const { createVerifications } = require("../controllers/kyc-controller");
+const { createVerification } = require("../controllers/kyc-controller");
 const validateBody = require("../middleware/validation");
 const verificationSchema = require("../schemas/verification-schema");
 
@@ -172,7 +172,7 @@ router.get("/", (req, res) => {
 router.post(
   "/verifications",
   validateBody(verificationSchema),
-  createVerifications
+  createVerification
 );
 
 module.exports = router;

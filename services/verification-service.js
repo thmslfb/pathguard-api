@@ -1,6 +1,6 @@
 const { v4: uuidv4 } = require("uuid");
 const calculateRiskScore = require("../utils/risk-scoring");
-const { createVerifications } = require("../models/verification-model");
+const { createVerification } = require("../models/verification-model");
 
 const LOW_THRESHOLD = parseFloat(process.env.LOW_THRESHOLD) || 0.2;
 const HIGH_THRESHOLD = parseFloat(process.env.HIGH_THRESHOLD) || 0.5;
@@ -21,7 +21,7 @@ const verifyAndSave = async (
   const verificationId = `ver_${uuidv4()}`;
 
   if (!isSwaggerRequest) {
-    await createVerifications({
+    await createVerification({
       verification_id: verificationId,
       status,
       score: riskScore,
