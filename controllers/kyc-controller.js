@@ -1,6 +1,6 @@
 const verifyAndSave = require("../services/verification-service");
 
-exports.verify = async (req, res, next) => {
+exports.createVerifications = async (req, res, next) => {
   try {
     const { name, email, documentType } = req.body;
 

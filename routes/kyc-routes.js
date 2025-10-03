@@ -1,5 +1,5 @@
 const express = require("express");
-const { verify } = require("../controllers/kyc-controller");
+const { createVerifications } = require("../controllers/kyc-controller");
 const validateBody = require("../middleware/validation");
 const verificationSchema = require("../schemas/verification-schema");
 
@@ -30,7 +30,7 @@ const router = express.Router();
  *                     properties:
  *                       path:
  *                         type: string
- *                         example: "/api/v1/kyc/verify"
+ *                         example: "/api/v1/kyc/verifications"
  *                       method:
  *                         type: string
  *                         example: "POST"
@@ -47,7 +47,7 @@ router.get("/", (req, res) => {
     message: "KYC service endpoints",
     endpoints: [
       {
-        path: "/api/v1/kyc/verify",
+        path: "/api/v1/kyc/verifications",
         method: "POST",
         description: "Perform identity verification",
       },
@@ -58,7 +58,7 @@ router.get("/", (req, res) => {
 
 /**
  * @swagger
- * /api/v1/kyc/verify:
+ * /api/v1/kyc/verifications:
  *   post:
  *     tags: [KYC]
  *     summary: Verify user identity
@@ -169,6 +169,10 @@ router.get("/", (req, res) => {
  *                   example: "Internal server error"
  */
 
-router.post("/verify", validateBody(verificationSchema), verify);
+router.post(
+  "/verifications",
+  validateBody(verificationSchema),
+  createVerifications
+);
 
 module.exports = router;
