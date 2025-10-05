@@ -205,7 +205,7 @@ router.post(
  *           default: 0
  *         required: false
  *         description: Number of verifications to skip for pagination
- *         example: 20
+ *         example: 0
  *     responses:
  *       200:
  *         description: List of verifications retrieved successfully
