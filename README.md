@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://res.cloudinary.com/dyq2t6mgd/image/upload/w_1200,h_400,c_fill/v1759670370/banner-pathguard_a0bt4c.png" alt="PathGuard API Banner" style="border-radius: 15px; width: 100%; max-width: 1200px;" />
+<img src="https://res.cloudinary.com/dyq2t6mgd/image/upload/w_1200,h_400,c_fill,r_20/v1759670370/banner-pathguard_a0bt4c.png" alt="PathGuard API Banner" width="100%" />
 
 <h1>🛡️ PathGuard API</h1>
 
@@ -24,6 +24,8 @@
 </div>
 
 ---
+
+<a id="features"></a>
 
 ## ✨ Features
 
@@ -71,6 +73,8 @@ graph LR
 - ⚙️ **Production Ready** - Structured logging & error handling
 
 ---
+
+<a id="quick-start"></a>
 
 ## 🚀 Quick Start
 
@@ -199,6 +203,8 @@ npm start
 
 ---
 
+<a id="api-reference"></a>
+
 ## 📡 API Reference
 
 | Method | Endpoint                    | Description              | Status |
@@ -216,6 +222,8 @@ http://localhost:3000/api/v1
 ```
 
 ---
+
+<a id="examples"></a>
 
 ## 🎯 Examples
 
