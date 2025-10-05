@@ -12,4 +12,13 @@ const createVerification = async ({ verification_id, status, score }) => {
     .returning();
 };
 
-module.exports = { createVerification };
+const getVerifications = async (limit = 100, offset = 0) => {
+  return await db
+    .select()
+    .from(verifications)
+    .orderBy(verifications.created_at, "desc")
+    .limit(limit)
+    .offset(offset);
+};
+
+module.exports = { createVerification, getVerifications };

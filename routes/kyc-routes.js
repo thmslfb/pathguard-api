@@ -1,5 +1,8 @@
 const express = require("express");
-const { createVerification } = require("../controllers/kyc-controller");
+const {
+  createVerification,
+  getVerifications,
+} = require("../controllers/kyc-controller");
 const validateBody = require("../middleware/validation");
 const verificationSchema = require("../schemas/verification-schema");
 
@@ -174,5 +177,92 @@ router.post(
   validateBody(verificationSchema),
   createVerification
 );
+
+/**
+ * @swagger
+ * /api/v1/kyc/verifications:
+ *   get:
+ *     tags: [KYC]
+ *     summary: Get all verifications
+ *     description: Retrieve a list of all KYC verifications with optional pagination support.
+ *     operationId: getVerifications
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 1000
+ *           default: 100
+ *         required: false
+ *         description: Maximum number of verifications to return
+ *         example: 50
+ *       - in: query
+ *         name: offset
+ *         schema:
+ *           type: integer
+ *           minimum: 0
+ *           default: 0
+ *         required: false
+ *         description: Number of verifications to skip for pagination
+ *         example: 20
+ *     responses:
+ *       200:
+ *         description: List of verifications retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   verification_id:
+ *                     type: string
+ *                     pattern: "^ver_[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+ *                     description: Unique verification identifier with 'ver_' prefix
+ *                     example: "ver_123e4567-e89b-12d3-a456-426614174000"
+ *                   status:
+ *                     type: string
+ *                     enum: ["approved", "pending_review", "rejected"]
+ *                     description: "Verification status: approved (score ≤ 0.2), pending_review (0.2 < score ≤ 0.5), rejected (score > 0.5)"
+ *                     example: "approved"
+ *                   risk_score:
+ *                     type: number
+ *                     format: float
+ *                     minimum: 0
+ *                     maximum: 1
+ *                     description: Calculated risk score based on name length, email validity, and document type
+ *                     example: 0.1
+ *                   created_at:
+ *                     type: string
+ *                     format: date-time
+ *                     description: ISO 8601 timestamp of when the verification was created
+ *                     example: "2025-10-05T14:30:00.000Z"
+ *             example:
+ *               - verification_id: "ver_123e4567-e89b-12d3-a456-426614174000"
+ *                 status: "approved"
+ *                 risk_score: 0.1
+ *                 created_at: "2025-10-05T14:30:00.000Z"
+ *               - verification_id: "ver_987fcdeb-51a2-43f1-b987-123456789abc"
+ *                 status: "pending_review"
+ *                 risk_score: 0.35
+ *                 created_at: "2025-10-05T12:45:00.000Z"
+ *               - verification_id: "ver_456def78-90ab-12cd-34ef-567890abcdef"
+ *                 status: "rejected"
+ *                 risk_score: 0.6
+ *                 created_at: "2025-10-05T11:20:00.000Z"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Internal server error"
+ */
+
+router.get("/verifications", getVerifications);
 
 module.exports = router;
