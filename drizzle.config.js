@@ -1,11 +1,9 @@
-const { databaseUrl, migrationDir } = require("./config/config");
-
 module.exports = {
   schema: "./database/schema.js",
-  out: migrationDir,
+  out: "./migrations",
   dialect: "postgresql",
   dbCredentials: {
-    url: databaseUrl,
+    url: process.env.DATABASE_URL,
     ssl: { rejectUnauthorized: false },
   },
 };
