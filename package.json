@@ -10,7 +10,7 @@
     "test": "vitest run --coverage",
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "migrate:generate": "drizzle-kit generate --schema ./database/schema.js --out ./migrations",
+    "migrate:generate": "drizzle-kit generate",
     "migrate:apply": "drizzle-kit migrate"
   },
   "dependencies": {
