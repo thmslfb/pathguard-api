@@ -1,3 +1,4 @@
+const { eq } = require("drizzle-orm");
 const db = require("../database/connection");
 const verifications = require("../database/schema");
 
@@ -21,4 +22,13 @@ const getVerifications = async (limit = 100, offset = 0) => {
     .offset(offset);
 };
 
-module.exports = { createVerification, getVerifications };
+const getVerificationById = async (verification_id) => {
+  const result = await db
+    .select()
+    .from(verifications)
+    .where(eq(verifications.verification_id, verification_id));
+
+  return result[0] || null;
+};
+
+module.exports = { createVerification, getVerifications, getVerificationById };
