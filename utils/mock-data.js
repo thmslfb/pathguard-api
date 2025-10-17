@@ -34,4 +34,20 @@ const getMockVerificationById = (id) => {
   );
 };
 
-module.exports = { getMockVerifications, getMockVerificationById };
+const updateMockVerificationStatus = (id, newStatus) => {
+  const verification = mockVerifications.find((v) => v.verification_id === id);
+  if (verification) {
+    return {
+      ...verification,
+      status: newStatus,
+      updated_at: new Date().toISOString(),
+    };
+  }
+  return null;
+};
+
+module.exports = {
+  getMockVerifications,
+  getMockVerificationById,
+  updateMockVerificationStatus,
+};
