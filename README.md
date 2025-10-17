@@ -207,14 +207,15 @@ npm start
 
 ## 📡 API Reference
 
-| Method | Endpoint                        | Description              | Status |
-| :----: | ------------------------------- | ------------------------ | :----: |
-| `GET`  | `/api/v1`                       | API information & health |   ✅   |
-| `GET`  | `/api/v1/health`                | System health check      |   ✅   |
-| `POST` | `/api/v1/kyc/verifications`     | Create verification      |   ✅   |
-| `GET`  | `/api/v1/kyc/verifications`     | List verifications       |   ✅   |
-| `GET`  | `/api/v1/kyc/verifications/:id` | List verification by ID  |   ✅   |
-| `GET`  | `/api/v1/docs`                  | Scalar documentation     |   📚   |
+| Method  | Endpoint                               | Description                | Status |
+| :-----: | -------------------------------------- | -------------------------- | :----: |
+|  `GET`  | `/api/v1`                              | API information & health   |   ✅   |
+|  `GET`  | `/api/v1/health`                       | System health check        |   ✅   |
+| `POST`  | `/api/v1/kyc/verifications`            | Create verification        |   ✅   |
+|  `GET`  | `/api/v1/kyc/verifications`            | List verifications         |   ✅   |
+|  `GET`  | `/api/v1/kyc/verifications/:id`        | List verification by ID    |   ✅   |
+| `PATCH` | `/api/v1/kyc/verifications/:id/status` | Update verification status |   ✅   |
+|  `GET`  | `/api/v1/docs`                         | Scalar documentation       |   📚   |
 
 ### 🔗 Base URL
 
@@ -228,7 +229,7 @@ http://localhost:3000/api/v1
 
 ## 🎯 Examples
 
-### Create A Verification
+### Perform identity verification
 
 <details open>
 <summary><b>POST /api/v1/kyc/verifications</b></summary>
@@ -313,14 +314,59 @@ curl -X POST http://localhost:3000/api/v1/kyc/verifications \
 ```
 
   </details>
+
+**Response (400 Bad Request)**
+
+### 1. Name error (name too short)
+
+```json
+{
+  "error": "Validation failed",
+  "details": [
+    {
+      "field": "name",
+      "message": "Name must be at least 2 characters long"
+    }
+  ]
+}
+```
+
+### 2. Email Error (invalid format)
+
+```json
+{
+  "error": "Validation failed",
+  "details": [
+    {
+      "field": "email",
+      "message": "Invalid email format"
+    }
+  ]
+}
+```
+
+### 3. Document type error (invalid value)
+
+```json
+{
+  "error": "Validation failed",
+  "details": [
+    {
+      "field": "documentType",
+      "message": "Invalid option: expected one of \"passport\"|\"id_card\"|\"driver_license\""
+    }
+  ]
+}
+```
+
 </details>
 
-### Listing Verifications
+### List all verifications
 
 <details>
 <summary><b>📋 GET /api/v1/kyc/verifications</b></summary>
 
-Retrieve all KYC verifications with pagination support.
+Retrieve a list of all KYC verifications with optional pagination support.
 
 ```bash
 curl http://localhost:3000/api/v1/kyc/verifications?limit=10&offset=0
@@ -366,12 +412,12 @@ curl http://localhost:3000/api/v1/kyc/verifications?limit=10&offset=0
 curl http://localhost:3000/api/v1/kyc/verifications?limit=20&offset=40
 ```
 
-### Listing Verification By ID
+### Get verification by ID​
 
 <details>
 <summary><b>GET /api/v1/kyc/verifications/:id</b></summary>
 
-Retrieve a KYC verification by his ID.
+Retrieve detailed information about a KYC verification using its unique identifier.
 
 ```bash
 curl http://localhost:3000/api/v1/kyc/verifications/ver_456def78-90ab-12cd-34ef-567890abcdef
@@ -389,6 +435,71 @@ curl http://localhost:3000/api/v1/kyc/verifications/ver_456def78-90ab-12cd-34ef-
 ```
 
 **Response (400 Validation Error):**
+
+```json
+{
+  "error": "Validation failed",
+  "details": [
+    {
+      "field": "id",
+      "message": "Invalid verification ID format. Must be in format ver_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    }
+  ]
+}
+```
+
+**Response (404 Not Found):**
+
+```json
+{
+  "error": "Verification not found"
+}
+```
+
+</details>
+
+### Update verification status
+
+<details>
+<summary><b>GET /api/v1/kyc/verifications/:id/status</b></summary>
+
+Update the status of a KYC verification by its unique identifier.
+
+```bash
+curl http://localhost:3000/api/v1/kyc/verifications/ver_52042584-e3ff-43c3-a6f0-bb9923dcadb7/status \
+  --request PATCH \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "status": "approved"
+}'
+```
+
+**Response (200 OK):**
+
+```json
+{
+  "verification_id": "ver_52042584-e3ff-43c3-a6f0-bb9923dcadb7",
+  "status": "approved"
+}
+```
+
+**Response (400 Validation Error):**
+
+### 1. Invalid status
+
+```json
+{
+  "error": "Validation failed",
+  "details": [
+    {
+      "field": "status",
+      "message": "Invalid option: expected one of \"approved\"|\"rejected\"|\"pending_review\""
+    }
+  ]
+}
+```
+
+### 2. Invalid ID
 
 ```json
 {
