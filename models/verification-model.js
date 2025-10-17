@@ -31,8 +31,17 @@ const getVerificationByIdFromDB = async (verification_id) => {
   return result[0] || null;
 };
 
+const updateVerificationStatusInDB = async (verification_id, new_status) => {
+  return await db
+    .update(verifications)
+    .set({ status: new_status, updated_at: new Date() })
+    .where(eq(verifications.verification_id, verification_id))
+    .returning();
+};
+
 module.exports = {
   createVerification,
   getVerificationsFromDB,
   getVerificationByIdFromDB,
+  updateVerificationStatusInDB,
 };
