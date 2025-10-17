@@ -2,6 +2,7 @@ const {
   verifyAndSave,
   getVerifications,
   getVerificationById,
+  updateVerificationStatus,
 } = require("../services/verification-service");
 
 const createVerification = async (req, res, next) => {
@@ -46,8 +47,27 @@ const getVerificationByIdHandler = async (req, res, next) => {
   }
 };
 
+const updateVerificationStatusHandler = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    const updatedVerification = await updateVerificationStatus(
+      id,
+      status,
+      req.isScalarRequest
+    );
+    if (!updatedVerification) {
+      return res.status(404).json({ error: "Verification not found" });
+    }
+    res.status(200).json(updatedVerification);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createVerification,
   getVerificationsHandler,
   getVerificationByIdHandler,
+  updateVerificationStatusHandler,
 };
