@@ -1,8 +1,8 @@
 const express = require("express");
 const {
   createVerification,
-  getVerifications,
-  getVerificationById,
+  getVerificationsHandler,
+  getVerificationByIdHandler,
 } = require("../controllers/kyc-controller");
 const validateRequest = require("../middleware/validation");
 const {
@@ -42,12 +42,12 @@ router.post(
   createVerification
 );
 
-router.get("/verifications", getVerifications);
+router.get("/verifications", getVerificationsHandler);
 
 router.get(
   "/verifications/:id",
   validateRequest(verificationIdSchema, "params"),
-  getVerificationById
+  getVerificationByIdHandler
 );
 
 module.exports = router;
