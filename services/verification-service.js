@@ -1,13 +1,21 @@
 const { v4: uuidv4 } = require("uuid");
 const calculateRiskScore = require("../utils/risk-scoring");
-const { createVerification } = require("../models/verification-model");
+const {
+  createVerification,
+  getVerificationsFromDB,
+  getVerificationByIdFromDB,
+} = require("../models/verification-model");
+const {
+  getMockVerifications,
+  getMockVerificationById,
+} = require("../utils/mock-data");
 
 const LOW_THRESHOLD = parseFloat(process.env.LOW_THRESHOLD) || 0.2;
 const HIGH_THRESHOLD = parseFloat(process.env.HIGH_THRESHOLD) || 0.5;
 
 const verifyAndSave = async (
   { name, email, documentType },
-  isSwaggerRequest = false
+  isScalarRequest = false
 ) => {
   const riskScore = calculateRiskScore({ name, email, documentType });
 
@@ -20,7 +28,7 @@ const verifyAndSave = async (
 
   const verificationId = `ver_${uuidv4()}`;
 
-  if (!isSwaggerRequest) {
+  if (!isScalarRequest) {
     await createVerification({
       verification_id: verificationId,
       status,
@@ -37,4 +45,16 @@ const verifyAndSave = async (
   };
 };
 
-module.exports = verifyAndSave;
+const getVerifications = async (limit, offset, isScalarRequest = false) => {
+  return isScalarRequest
+    ? getMockVerifications(limit, offset)
+    : await getVerificationsFromDB(limit, offset);
+};
+
+const getVerificationById = async (id, isScalarRequest = false) => {
+  return isScalarRequest
+    ? getMockVerificationById(id)
+    : await getVerificationByIdFromDB(id);
+};
+
+module.exports = { verifyAndSave, getVerifications, getVerificationById };
