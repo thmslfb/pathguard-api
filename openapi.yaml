@@ -24,6 +24,20 @@ paths:
                   timestamp:
                     type: integer
                     example: 1759239042808
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - error
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+              example:
+                error: Internal server error
   /api/v1:
     get:
       tags:
@@ -59,6 +73,20 @@ paths:
                       docs:
                         type: string
                         example: /api/v1/docs
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - error
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+              example:
+                error: Internal server error
   /api/v1/kyc:
     get:
       tags:
@@ -105,6 +133,20 @@ paths:
                   documentation:
                     type: string
                     example: /api/v1/docs/#tag/kyc
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - error
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+              example:
+                error: Internal server error
   /api/v1/kyc/verifications:
     post:
       tags:
@@ -195,6 +237,8 @@ paths:
             application/json:
               schema:
                 type: object
+                required:
+                  - error
                 properties:
                   error:
                     type: string
@@ -203,24 +247,38 @@ paths:
                     type: array
                     items:
                       type: object
+                      required:
+                        - field
+                        - message
                       properties:
                         field:
                           type: string
-                          description: The field that failed validation
                           example: name
                         message:
                           type: string
-                          description: Detailed validation error message
                           example: Name must be at least 2 characters long
-                    example:
-                      - field: name
-                        message: Name must be at least 2 characters long
-                      - field: email
-                        message: Invalid email format
-                      - field: documentType
-                        message: >-
-                          Invalid option: expected one of
-                          "passport"|"id_card"|"driver_license"
+              examples:
+                invalidName:
+                  summary: Invalid name
+                  value:
+                    error: "Validation failed"
+                    details:
+                      - field: "name"
+                        message: "Name must be at least 2 characters long"
+                invalidEmail:
+                  summary: Invalid email format
+                  value:
+                    error: "Validation failed"
+                    details:
+                      - field: "email"
+                        message: "Invalid email format"
+                invalidDocumentType:
+                  summary: Invalid document type
+                  value:
+                    error: "Validation failed"
+                    details:
+                      - field: "documentType"
+                        message: 'Invalid option: expected one of "passport"|"id_card"|"driver_license"'
         "500":
           description: Internal server error
           content:
@@ -434,6 +492,121 @@ paths:
                     message: >-
                       Invalid verification ID format. Must be in format
                       ver_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        "404":
+          description: Verification not found
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - error
+                properties:
+                  error:
+                    type: string
+                    example: Verification not found
+              example:
+                error: Verification not found
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - error
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+              example:
+                error: Internal server error
+  /api/v1/kyc/verifications/{id}/status:
+    patch:
+      tags:
+        - KYC
+      summary: Update verification status
+      description: Update the status of a KYC verification by its unique identifier.
+      operationId: updateVerificationStatus
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Unique verification identifier with 'ver_' prefix followed by UUID
+          example: ver_52042584-e3ff-43c3-a6f0-bb9923dcadb7
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - status
+              properties:
+                status:
+                  type: string
+                  enum:
+                    - approved
+                    - pending_review
+                    - rejected
+                  description: New status for the verification
+                  example: approved
+      responses:
+        "200":
+          description: Verification status updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  verification_id:
+                    type: string
+                    example: ver_52042584-e3ff-43c3-a6f0-bb9923dcadb7
+                  status:
+                    type: string
+                    example: approved
+        "400":
+          description: Invalid request (validation error)
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - error
+                properties:
+                  error:
+                    type: string
+                    example: Validation failed
+                  details:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - field
+                        - message
+                      properties:
+                        field:
+                          type: string
+                          example: status
+                        message:
+                          type: string
+                          example: 'Invalid option: expected one of "approved"|"rejected"|"pending_review"'
+              examples:
+                invalidStatus:
+                  summary: Invalid status value
+                  value:
+                    error: "Validation failed"
+                    details:
+                      - field: "status"
+                        message: 'Invalid option: expected one of "approved"|"rejected"|"pending_review"'
+                invalidId:
+                  summary: Invalid verification ID format
+                  value:
+                    error: "Validation failed"
+                    details:
+                      - field: "id"
+                        message: "Invalid verification ID format. Must be in format ver_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
         "404":
           description: Verification not found
           content:
