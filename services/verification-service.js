@@ -4,10 +4,12 @@ const {
   createVerification,
   getVerificationsFromDB,
   getVerificationByIdFromDB,
+  updateVerificationStatusInDB,
 } = require("../models/verification-model");
 const {
   getMockVerifications,
   getMockVerificationById,
+  updateMockVerificationStatus,
 } = require("../utils/mock-data");
 
 const LOW_THRESHOLD = parseFloat(process.env.LOW_THRESHOLD) || 0.2;
@@ -57,4 +59,19 @@ const getVerificationById = async (id, isScalarRequest = false) => {
     : await getVerificationByIdFromDB(id);
 };
 
-module.exports = { verifyAndSave, getVerifications, getVerificationById };
+const updateVerificationStatus = async (
+  id,
+  status,
+  isScalarRequest = false
+) => {
+  return isScalarRequest
+    ? updateMockVerificationStatus(id, status)
+    : await updateVerificationStatusInDB(id, status);
+};
+
+module.exports = {
+  verifyAndSave,
+  getVerifications,
+  getVerificationById,
+  updateVerificationStatus,
+};
