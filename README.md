@@ -207,13 +207,14 @@ npm start
 
 ## 📡 API Reference
 
-| Method | Endpoint                    | Description              | Status |
-| :----: | --------------------------- | ------------------------ | :----: |
-| `GET`  | `/api/v1`                   | API information & health |   ✅   |
-| `GET`  | `/api/v1/health`            | System health check      |   ✅   |
-| `POST` | `/api/v1/kyc/verifications` | Create verification      |   ✅   |
-| `GET`  | `/api/v1/kyc/verifications` | List verifications       |   ✅   |
-| `GET`  | `/api/v1/docs`              | Swagger documentation    |   📚   |
+| Method | Endpoint                        | Description              | Status |
+| :----: | ------------------------------- | ------------------------ | :----: |
+| `GET`  | `/api/v1`                       | API information & health |   ✅   |
+| `GET`  | `/api/v1/health`                | System health check      |   ✅   |
+| `POST` | `/api/v1/kyc/verifications`     | Create verification      |   ✅   |
+| `GET`  | `/api/v1/kyc/verifications`     | List verifications       |   ✅   |
+| `GET`  | `/api/v1/kyc/verifications/:id` | List verification by ID  |   ✅   |
+| `GET`  | `/api/v1/docs`                  | Swagger documentation    |   📚   |
 
 ### 🔗 Base URL
 
@@ -227,10 +228,13 @@ http://localhost:3000/api/v1
 
 ## 🎯 Examples
 
-### Request Examples
+### Create A Verification
 
 <details open>
-<summary><b>✅ Low Risk - Approved</b></summary>
+<summary><b>POST /api/v1/kyc/verifications</b></summary>
+  <br>
+  <details open>
+  <summary><b>✅ Low Risk - Approved</b></summary>
 
 ```bash
 curl -X POST http://localhost:3000/api/v1/kyc/verifications \
@@ -254,10 +258,10 @@ curl -X POST http://localhost:3000/api/v1/kyc/verifications \
 }
 ```
 
-</details>
+  </details>
 
-<details>
-<summary><b>🟡 Medium Risk - Pending Review</b></summary>
+  <details>
+  <summary><b>🟡 Medium Risk - Pending Review</b></summary>
 
 ```bash
 curl -X POST http://localhost:3000/api/v1/kyc/verifications \
@@ -281,10 +285,10 @@ curl -X POST http://localhost:3000/api/v1/kyc/verifications \
 }
 ```
 
-</details>
+  </details>
 
-<details>
-<summary><b>❌ High Risk - Rejected</b></summary>
+  <details>
+  <summary><b>❌ High Risk - Rejected</b></summary>
 
 ```bash
 curl -X POST http://localhost:3000/api/v1/kyc/verifications \
@@ -308,6 +312,7 @@ curl -X POST http://localhost:3000/api/v1/kyc/verifications \
 }
 ```
 
+  </details>
 </details>
 
 ### Listing Verifications
@@ -360,6 +365,52 @@ curl http://localhost:3000/api/v1/kyc/verifications?limit=10&offset=0
 ```bash
 curl http://localhost:3000/api/v1/kyc/verifications?limit=20&offset=40
 ```
+
+### Listing Verification By ID
+
+<details>
+<summary><b>GET /api/v1/kyc/verifications/:id</b></summary>
+
+Retrieve a KYC verification by his ID.
+
+```bash
+curl http://localhost:3000/api/v1/kyc/verifications/ver_456def78-90ab-12cd-34ef-567890abcdef
+```
+
+**Response (200 OK):**
+
+```json
+{
+  "verification_id": "ver_456def78-90ab-12cd-34ef-567890abcdef",
+  "status": "pending_review",
+  "risk_score": 0.35,
+  "created_at": "2025-10-05T14:30:00.000Z"
+}
+```
+
+**Response (400 Validation Error):**
+
+```json
+{
+  "error": "Validation failed",
+  "details": [
+    {
+      "field": "id",
+      "message": "Invalid verification ID format. Must be in format ver_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    }
+  ]
+}
+```
+
+**Response (404 Not Found):**
+
+```json
+{
+  "error": "Verification not found"
+}
+```
+
+</details>
 
 ---
 
