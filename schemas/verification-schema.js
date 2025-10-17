@@ -9,7 +9,7 @@ const verificationSchema = z.object({
   email: z.email("Invalid email format").toLowerCase(),
   documentType: z.enum(["passport", "id_card", "driver_license"], {
     errorMap: () => ({
-      message: "IDocument type must be passport, id_card, or driver_license",
+      message: "Document type must be passport, id_card, or driver_license",
     }),
   }),
 });
@@ -23,4 +23,16 @@ const verificationIdSchema = z.object({
     ),
 });
 
-module.exports = { verificationSchema, verificationIdSchema };
+const updateStatusSchema = z.object({
+  status: z.enum(["approved", "rejected", "pending_review"], {
+    errorMap: () => ({
+      message: "Status must be one of: approved, rejected, pending_review",
+    }),
+  }),
+});
+
+module.exports = {
+  verificationSchema,
+  verificationIdSchema,
+  updateStatusSchema,
+};
