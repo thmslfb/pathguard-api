@@ -3,11 +3,13 @@ const {
   createVerification,
   getVerificationsHandler,
   getVerificationByIdHandler,
+  updateVerificationStatusHandler,
 } = require("../controllers/kyc-controller");
 const validateRequest = require("../middleware/validation");
 const {
   verificationSchema,
   verificationIdSchema,
+  updateStatusSchema,
 } = require("../schemas/verification-schema");
 
 const router = express.Router();
@@ -48,6 +50,13 @@ router.get(
   "/verifications/:id",
   validateRequest(verificationIdSchema, "params"),
   getVerificationByIdHandler
+);
+
+router.patch(
+  "/verifications/:id/status",
+  validateRequest(verificationIdSchema, "params"),
+  validateRequest(updateStatusSchema, "body"),
+  updateVerificationStatusHandler
 );
 
 module.exports = router;
