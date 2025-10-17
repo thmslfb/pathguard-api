@@ -5,6 +5,7 @@ const verifications = pgTable("verifications", {
   status: varchar("status", { length: 20 }).notNull(),
   risk_score: numeric("risk_score", { precision: 5, scale: 3 }).notNull(),
   created_at: timestamp("created_at").notNull().defaultNow(),
+  updated_at: timestamp("updated_at").notNull().defaultNow(),
 });
 
-module.exports = verifications;
+module.exports = { verifications };
