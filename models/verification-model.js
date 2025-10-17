@@ -13,7 +13,7 @@ const createVerification = async ({ verification_id, status, score }) => {
     .returning();
 };
 
-const getVerifications = async (limit = 100, offset = 0) => {
+const getVerificationsFromDB = async (limit = 100, offset = 0) => {
   return await db
     .select()
     .from(verifications)
@@ -22,7 +22,7 @@ const getVerifications = async (limit = 100, offset = 0) => {
     .offset(offset);
 };
 
-const getVerificationById = async (verification_id) => {
+const getVerificationByIdFromDB = async (verification_id) => {
   const result = await db
     .select()
     .from(verifications)
@@ -31,4 +31,8 @@ const getVerificationById = async (verification_id) => {
   return result[0] || null;
 };
 
-module.exports = { createVerification, getVerifications, getVerificationById };
+module.exports = {
+  createVerification,
+  getVerificationsFromDB,
+  getVerificationByIdFromDB,
+};
