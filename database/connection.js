@@ -1,10 +1,8 @@
-// database/connection.js
-const { databaseUrl, migrationDir } = require("../config/config");
 const { Pool } = require("pg");
 const { drizzle } = require("drizzle-orm/node-postgres");
 
 const pool = new Pool({
-  connectionString: databaseUrl,
+  connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
   keepAlive: true,
 });
@@ -25,6 +23,6 @@ pool
     console.error("DB connection error:", err);
   });
 
-const db = drizzle(pool, { migrationFolder: migrationDir });
+const db = drizzle(pool, { migrationFolder: "./migrations" });
 
 module.exports = db;
