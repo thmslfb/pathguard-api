@@ -14,7 +14,7 @@ const createVerification = async (req, res, next) => {
 
     const result = await verifyAndSave(
       { name, email, documentType },
-      req.isSwaggerRequest
+      req.isScalarRequest
     );
     res.status(200).json(result);
   } catch (error) {
@@ -26,7 +26,7 @@ const getVerifications = async (req, res, next) => {
   try {
     const limit = req.query.limit ? parseInt(req.query.limit) : undefined;
     const offset = req.query.offset ? parseInt(req.query.offset) : undefined;
-    const verifications = req.isSwaggerRequest
+    const verifications = req.isScalarRequest
       ? getMockVerifications(limit, offset)
       : await getVerificationsFromDB(limit, offset);
     res.status(200).json(verifications);
@@ -38,7 +38,7 @@ const getVerifications = async (req, res, next) => {
 const getVerificationById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const verificationById = req.isSwaggerRequest
+    const verificationById = req.isScalarRequest
       ? getMockVerificationById(id)
       : await getVerificationByIdFromDB(id);
     if (!verificationById) {

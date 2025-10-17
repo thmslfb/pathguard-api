@@ -3,58 +3,52 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const morgan = require("morgan");
-const swaggerUi = require("swagger-ui-express");
-const swaggerJsdoc = require("swagger-jsdoc");
 const infoRoutes = require("./routes/info-routes");
 const healthRoutes = require("./routes/health-routes");
 const kycRoutes = require("./routes/kyc-routes");
 const notFoundHandler = require("./middleware/not-found-handler");
 const errorHandler = require("./middleware/error-handler");
-const detectSwagger = require("./middleware/swagger-detection");
+const { apiReference } = require("@scalar/express-api-reference");
+const detectScalar = require("./middleware/scalar-detection");
 
 const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST || "http://localhost";
-const BASE_URL = `${HOST}:${PORT}`;
-
-const options = {
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "PathGuard API",
-      version: "1.0.0",
-      description:
-        "A modular KYC API with customizable risk scoring, validation checks, and PostgreSQL persistence",
-    },
-    servers: [
-      {
-        url: BASE_URL,
-      },
-    ],
-  },
-  apis: ["./routes/*.js"],
-};
 
 const app = express();
-const specs = swaggerJsdoc(options);
-
-app.use(helmet());
-app.use(cors());
-app.use(morgan(process.env.NODE_ENV === "production" ? "common" : "dev"));
-app.use(express.json());
-app.use(detectSwagger);
 
 app.use(
-  "/api/v1/docs",
-  swaggerUi.serve,
-  swaggerUi.setup(specs, {
-    swaggerOptions: {
-      requestInterceptor: (request) => {
-        request.headers["X-Swagger-UI"] = "true";
-        return request;
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        "script-src": ["'self'", "https://cdn.jsdelivr.net", "'unsafe-inline'"],
+        "style-src": ["'self'", "https://cdn.jsdelivr.net", "'unsafe-inline'"],
       },
     },
   })
 );
+app.use(cors());
+app.use(morgan(process.env.NODE_ENV === "production" ? "common" : "dev"));
+app.use(express.json());
+
+app.use("/openapi.yaml", express.static("openapi.yaml"));
+
+app.use(
+  "/api/v1/docs",
+  apiReference({
+    spec: {
+      url: "/openapi.yaml",
+    },
+    onBeforeRequest: ({ request }) => {
+      console.log("[Scalar onBeforeRequest] Adding header to request");
+      request.headers.set("x-scalar-docs", "true");
+      return request;
+    },
+  })
+);
+
+app.use(detectScalar);
+
+// Vos routes API
 app.use("/api/v1", infoRoutes);
 app.use("/api/v1/health", healthRoutes);
 app.use("/api/v1/kyc", kycRoutes);

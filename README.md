@@ -45,7 +45,7 @@
 
 ### ⚡ Developer Experience
 
-- **Interactive Swagger UI** - Live API playground
+- **Interactive Scalar Documentation** - Live API playground
 - **Mock Data System** - Test without DB setup
 - **Clean Architecture** - Maintainable codebase
 - **Type Safety** - Zod schema validation
@@ -68,7 +68,7 @@ graph LR
 
 - 🛡️ **Enterprise Security** - Helmet, CORS, input sanitization
 - 📊 **Smart Pagination** - Efficient data retrieval
-- 🚨 **Custom Middleware** - Swagger pollution prevention
+- 🚨 **Custom Middleware** - Scalar pollution prevention
 - 🏗️ **Layered Design** - Controllers → Services → Models
 - ⚙️ **Production Ready** - Structured logging & error handling
 
@@ -92,7 +92,7 @@ npm install
 npm run dev
 ```
 
-> **🎮 Live Playground:** Open http://localhost:3000/api/v1/docs to interact with the API through Swagger UI
+> **🎮 Live Playground:** Open http://localhost:3000/api/v1/docs to interact with the API through Scalar
 
 ### 🎯 First API Call
 
@@ -128,7 +128,7 @@ curl -X POST http://localhost:3000/api/v1/kyc/verifications \
 | **Framework**     | ![Express](https://img.shields.io/badge/Express-000000?style=flat-square&logo=express&logoColor=white)                                                                                                                     |
 | **Database**      | ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white) ![Drizzle](https://img.shields.io/badge/Drizzle_ORM-C5F74F?style=flat-square&logo=drizzle&logoColor=black) |
 | **Validation**    | ![Zod](https://img.shields.io/badge/Zod-3E67B1?style=flat-square&logo=zod&logoColor=white)                                                                                                                                 |
-| **Documentation** | ![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=flat-square&logo=swagger&logoColor=black)                                                                                                                     |
+| **Documentation** | ![Scalar](https://img.shields.io/badge/Scalar-000000?style=flat-square&logo=scalar&logoColor=E7E7E7)                                                                                                                       |
 | **Testing**       | ![Vitest](https://img.shields.io/badge/Vitest-6E9F18?style=flat-square&logo=vitest&logoColor=white)                                                                                                                        |
 | **Security**      | ![Helmet](https://img.shields.io/badge/Helmet-000000?style=flat-square)                                                                                                                                                    |
 
@@ -199,7 +199,7 @@ npm start
 ```
 
 ✅ **API Ready:** http://localhost:3000/api/v1  
-📚 **Swagger UI:** http://localhost:3000/api/v1/docs
+📚 **Scalar Documentation:** http://localhost:3000/api/v1/docs
 
 ---
 
@@ -214,7 +214,7 @@ npm start
 | `POST` | `/api/v1/kyc/verifications`     | Create verification      |   ✅   |
 | `GET`  | `/api/v1/kyc/verifications`     | List verifications       |   ✅   |
 | `GET`  | `/api/v1/kyc/verifications/:id` | List verification by ID  |   ✅   |
-| `GET`  | `/api/v1/docs`                  | Swagger documentation    |   📚   |
+| `GET`  | `/api/v1/docs`                  | Scalar documentation     |   📚   |
 
 ### 🔗 Base URL
 
@@ -559,9 +559,9 @@ npm start                # Production server
 | ------------------------- | ----------------------------------------------------------------- |
 | 🏛️ **Clean Architecture** | Separation of concerns (Routes → Controllers → Services → Models) |
 | 🔒 **Security**           | Input validation, CORS, Helmet security headers                   |
-| 📖 **Documentation**      | Interactive Swagger UI with live examples                         |
+| 📖 **Documentation**      | Interactive Scalar Documentation with live examples               |
 | 🗄️ **Database**           | PostgreSQL with Drizzle ORM and migrations                        |
-| 🛡️ **Smart Middleware**   | Custom Swagger detection prevents doc pollution                   |
+| 🛡️ **Smart Middleware**   | Custom Scalar detection prevents doc pollution                    |
 | ⚠️ **Error Handling**     | Centralized error management with proper HTTP codes               |
 | ✨ **Code Quality**       | Conventional commits, modular structure                           |
 
@@ -599,7 +599,7 @@ Built with modern web development best practices and industry-standard tools:
 - [Node.js](https://nodejs.org/) - JavaScript runtime
 - [PostgreSQL](https://postgresql.org/) - Advanced open source database
 - [Drizzle ORM](https://orm.drizzle.team/) - TypeScript ORM
-- [Swagger UI](https://swagger.io/tools/swagger-ui/) - API documentation
+- [Scalar](https://scalar.com/) - API documentation
 - [Zod](https://zod.dev/) - TypeScript-first schema validation
 - [Vitest](https://vitest.dev/) - Next generation testing framework
 
