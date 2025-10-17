@@ -1,6 +1,6 @@
 const { eq } = require("drizzle-orm");
 const db = require("../database/connection");
-const verifications = require("../database/schema");
+const { verifications } = require("../database/schema");
 
 const createVerification = async ({ verification_id, status, score }) => {
   return await db
