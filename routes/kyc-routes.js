@@ -2,9 +2,13 @@ const express = require("express");
 const {
   createVerification,
   getVerifications,
+  getVerificationById,
 } = require("../controllers/kyc-controller");
-const validateBody = require("../middleware/validation");
-const verificationSchema = require("../schemas/verification-schema");
+const validateRequest = require("../middleware/validation");
+const {
+  verificationSchema,
+  verificationIdSchema,
+} = require("../schemas/verification-schema");
 
 const router = express.Router();
 
@@ -174,7 +178,7 @@ router.get("/", (req, res) => {
 
 router.post(
   "/verifications",
-  validateBody(verificationSchema),
+  validateRequest(verificationSchema),
   createVerification
 );
 
@@ -264,5 +268,129 @@ router.post(
  */
 
 router.get("/verifications", getVerifications);
+
+/**
+ * @swagger
+ * /api/v1/kyc/verifications/{id}:
+ *   get:
+ *     tags: [KYC]
+ *     summary: Get a specific verification by ID
+ *     description: Retrieve detailed information about a KYC verification using its unique identifier.
+ *     operationId: getVerificationById
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Unique verification identifier with 'ver_' prefix followed by UUID
+ *         example: "ver_456def78-90ab-12cd-34ef-567890abcdef"
+ *     responses:
+ *       200:
+ *         description: Verification retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               required:
+ *                 - verification_id
+ *                 - status
+ *                 - risk_score
+ *                 - created_at
+ *               properties:
+ *                 verification_id:
+ *                   type: string
+ *                   pattern: "^ver_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+ *                   description: Unique verification identifier
+ *                   example: "ver_456def78-90ab-12cd-34ef-567890abcdef"
+ *                 status:
+ *                   type: string
+ *                   enum: ["approved", "pending_review", "rejected"]
+ *                   description: Verification status based on risk score thresholds
+ *                   example: "pending_review"
+ *                 risk_score:
+ *                   type: number
+ *                   format: float
+ *                   minimum: 0
+ *                   maximum: 1
+ *                   description: Calculated risk score (0 = lowest risk, 1 = highest risk)
+ *                   example: 0.35
+ *                 created_at:
+ *                   type: string
+ *                   format: date-time
+ *                   description: Timestamp when the verification was created
+ *                   example: "2025-10-05T14:30:00.000Z"
+ *             example:
+ *               verification_id: "ver_456def78-90ab-12cd-34ef-567890abcdef"
+ *               status: "pending_review"
+ *               risk_score: 0.35
+ *               created_at: "2025-10-05T12:45:00.000Z"
+ *       400:
+ *         description: Invalid verification ID format
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               required:
+ *                 - error
+ *                 - details
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Validation failed"
+ *                 details:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     required:
+ *                       - field
+ *                       - message
+ *                     properties:
+ *                       field:
+ *                         type: string
+ *                         example: "id"
+ *                       message:
+ *                         type: string
+ *                         example: "Invalid verification ID format. Must be in format ver_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+ *             example:
+ *               error: "Validation failed"
+ *               details:
+ *                 - field: "id"
+ *                   message: "Invalid verification ID format. Must be in format ver_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+ *       404:
+ *         description: Verification not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               required:
+ *                 - error
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Verification not found"
+ *             example:
+ *               error: "Verification not found"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               required:
+ *                 - error
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Internal server error"
+ *             example:
+ *               error: "Internal server error"
+ */
+
+router.get(
+  "/verifications/:id",
+  validateRequest(verificationIdSchema, "params"),
+  getVerificationById
+);
 
 module.exports = router;
