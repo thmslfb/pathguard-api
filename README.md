@@ -207,15 +207,16 @@ npm start
 
 ## 📡 API Reference
 
-| Method  | Endpoint                               | Description                | Status |
-| :-----: | -------------------------------------- | -------------------------- | :----: |
-|  `GET`  | `/api/v1`                              | API information & health   |   ✅   |
-|  `GET`  | `/api/v1/health`                       | System health check        |   ✅   |
-| `POST`  | `/api/v1/kyc/verifications`            | Create verification        |   ✅   |
-|  `GET`  | `/api/v1/kyc/verifications`            | List verifications         |   ✅   |
-|  `GET`  | `/api/v1/kyc/verifications/:id`        | List verification by ID    |   ✅   |
-| `PATCH` | `/api/v1/kyc/verifications/:id/status` | Update verification status |   ✅   |
-|  `GET`  | `/api/v1/docs`                         | Scalar documentation       |   📚   |
+|  Method  | Endpoint                               | Description                | Status |
+| :------: | -------------------------------------- | -------------------------- | :----: |
+|  `GET`   | `/api/v1`                              | API information & health   |   ✅   |
+|  `GET`   | `/api/v1/health`                       | System health check        |   ✅   |
+|  `POST`  | `/api/v1/kyc/verifications`            | Create verification        |   ✅   |
+|  `GET`   | `/api/v1/kyc/verifications`            | List verifications         |   ✅   |
+|  `GET`   | `/api/v1/kyc/verifications/:id`        | List verification by ID    |   ✅   |
+| `DELETE` | `/api/v1/kyc/verifications/:id`        | Delete verification by ID  |   ✅   |
+| `PATCH`  | `/api/v1/kyc/verifications/:id/status` | Update verification status |   ✅   |
+|  `GET`   | `/api/v1/docs`                         | Scalar documentation       |   📚   |
 
 ### 🔗 Base URL
 
@@ -445,6 +446,35 @@ curl http://localhost:3000/api/v1/kyc/verifications/ver_456def78-90ab-12cd-34ef-
       "message": "Invalid verification ID format. Must be in format ver_xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
     }
   ]
+}
+```
+
+**Response (404 Not Found):**
+
+```json
+{
+  "error": "Verification not found"
+}
+```
+
+</details>
+
+### Delete verification by ID
+
+<details>
+<summary><b>DELETE /api/v1/kyc/verifications/:id</b></summary>
+
+Delete a KYC verification using its unique identifier.
+
+```bash
+curl -X DELETE http://localhost:3000/api/v1/kyc/verifications/ver_456def78-90ab-12cd-34ef-567890abcdef
+```
+
+**Response (200 OK):**
+
+```json
+{
+  "message": "Verification deleted successfully"
 }
 ```
 
