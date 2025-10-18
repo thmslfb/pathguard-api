@@ -14,6 +14,17 @@ const verificationSchema = z.object({
   }),
 });
 
+const paginationSchema = z.object({
+  limit: z.preprocess(
+    (val) => (val === undefined ? undefined : Number(val)),
+    z.number().int().min(1).max(1000).default(10)
+  ),
+  offset: z.preprocess(
+    (val) => (val === undefined ? undefined : Number(val)),
+    z.number().int().min(0).default(0)
+  ),
+});
+
 const verificationIdSchema = z.object({
   id: z
     .string()
@@ -33,6 +44,7 @@ const updateStatusSchema = z.object({
 
 module.exports = {
   verificationSchema,
+  paginationSchema,
   verificationIdSchema,
   updateStatusSchema,
 };

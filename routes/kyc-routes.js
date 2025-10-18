@@ -11,6 +11,7 @@ const {
   verificationSchema,
   verificationIdSchema,
   updateStatusSchema,
+  paginationSchema,
 } = require("../schemas/verification-schema");
 
 const router = express.Router();
@@ -45,7 +46,11 @@ router.post(
   createVerification
 );
 
-router.get("/verifications", getVerificationsHandler);
+router.get(
+  "/verifications",
+  validateRequest(paginationSchema, "query"),
+  getVerificationsHandler
+);
 
 router.get(
   "/verifications/:id",
