@@ -3,6 +3,7 @@ const {
   getVerifications,
   getVerificationById,
   updateVerificationStatus,
+  deleteVerificationById,
 } = require("../services/verification-service");
 
 const createVerification = async (req, res, next) => {
@@ -65,9 +66,23 @@ const updateVerificationStatusHandler = async (req, res, next) => {
   }
 };
 
+const deleteVerificationByIdHandler = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const deleted = await deleteVerificationById(id, req.isScalarRequest);
+    if (!deleted) {
+      return res.status(404).json({ error: "Verification not found" });
+    }
+    res.status(200).json({ message: "Verification deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createVerification,
   getVerificationsHandler,
   getVerificationByIdHandler,
   updateVerificationStatusHandler,
+  deleteVerificationByIdHandler,
 };
