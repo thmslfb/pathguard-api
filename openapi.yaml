@@ -520,6 +520,59 @@ paths:
                     example: Internal server error
               example:
                 error: Internal server error
+    delete:
+      tags:
+        - KYC
+      summary: Delete verification by ID
+      description: Delete a KYC verification using its unique identifier.
+      operationId: deleteVerificationById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Unique verification identifier with 'ver_' prefix followed by UUID
+          example: ver_52042584-e3ff-43c3-a6f0-bb9923dcadb7
+      responses:
+        "200":
+          description: Verification deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Verification deleted successfully
+        "404":
+          description: Verification not found
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - error
+                properties:
+                  error:
+                    type: string
+                    example: Verification not found
+              example:
+                error: Verification not found
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - error
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+              example:
+                error: Internal server error
   /api/v1/kyc/verifications/{id}/status:
     patch:
       tags:
