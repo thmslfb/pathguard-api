@@ -379,6 +379,61 @@ paths:
                   risk_score: "0.600"
                   created_at: "2025-10-17T15:04:22.055Z"
                   updated_at: "2025-10-17T15:04:22.055Z"
+        "400":
+          description: Validation error - invalid pagination parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - error
+                properties:
+                  error:
+                    type: string
+                    example: Validation failed
+                  details:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - field
+                        - message
+                      properties:
+                        field:
+                          type: string
+                          example: limit
+                        message:
+                          type: string
+                          example: "Invalid input: expected number, received NaN"
+              examples:
+                invalidLimitType:
+                  summary: Invalid type for limit
+                  value:
+                    error: Validation failed
+                    details:
+                      - field: limit
+                        message: "Invalid input: expected number, received NaN"
+                invalidOffsetType:
+                  summary: Invalid type for offset
+                  value:
+                    error: Validation failed
+                    details:
+                      - field: offset
+                        message: "Invalid input: expected number, received NaN"
+                tooSmall:
+                  summary: Limit too small
+                  value:
+                    error: Validation failed
+                    details:
+                      - field: limit
+                        message: "Too small: expected number to be >=1"
+                tooBig:
+                  summary: Limit too big
+                  value:
+                    error: Validation failed
+                    details:
+                      - field: limit
+                        message: "Too big: expected number to be <=1000"
         "500":
           description: Internal server error
           content:
@@ -457,7 +512,7 @@ paths:
                 created_at: "2025-10-17T11:34:32.976Z"
                 updated_at: "2025-10-17T11:34:32.976Z"
         "400":
-          description: Invalid verification ID format
+          description: Validation error - invalid id parameter
           content:
             application/json:
               schema:
@@ -620,7 +675,7 @@ paths:
                     type: string
                     example: approved
         "400":
-          description: Invalid request (validation error)
+          description: Validation error - invalid request data
           content:
             application/json:
               schema:

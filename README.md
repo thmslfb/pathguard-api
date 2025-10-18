@@ -315,10 +315,11 @@ curl -X POST http://localhost:3000/api/v1/kyc/verifications \
 ```
 
   </details>
+  <br>
 
 **Response (400 Bad Request)**
 
-### 1. Name error (name too short)
+1. Name error (name too short)
 
 ```json
 {
@@ -332,7 +333,7 @@ curl -X POST http://localhost:3000/api/v1/kyc/verifications \
 }
 ```
 
-### 2. Email Error (invalid format)
+2. Email Error (invalid format)
 
 ```json
 {
@@ -346,7 +347,7 @@ curl -X POST http://localhost:3000/api/v1/kyc/verifications \
 }
 ```
 
-### 3. Document type error (invalid value)
+3. Document type error (invalid value)
 
 ```json
 {
@@ -398,7 +399,47 @@ curl http://localhost:3000/api/v1/kyc/verifications?limit=10&offset=0
 ]
 ```
 
-</details>
+**Response (400 Bad Request)**
+
+1. Invalid type for limit and offset
+
+```json
+{
+  "error": "Validation failed",
+  "details": [
+    {
+      "field": "limit",
+      "message": "Invalid input: expected number, received NaN"
+    },
+    {
+      "field": "offset",
+      "message": "Invalid input: expected number, received NaN"
+    }
+  ]
+}
+```
+
+2. Limit too small
+
+```json
+{
+  "error": "Validation failed",
+  "details": [
+    { "field": "limit", "message": "Too small: expected number to be >=1" }
+  ]
+}
+```
+
+3. Limit too big
+
+```json
+{
+  "error": "Validation failed",
+  "details": [
+    { "field": "limit", "message": "Too big: expected number to be <=1000" }
+  ]
+}
+```
 
 ### Query Parameters
 
@@ -412,6 +453,8 @@ curl http://localhost:3000/api/v1/kyc/verifications?limit=10&offset=0
 ```bash
 curl http://localhost:3000/api/v1/kyc/verifications?limit=20&offset=40
 ```
+
+</details>
 
 ### Get verification by ID​
 
@@ -435,7 +478,9 @@ curl http://localhost:3000/api/v1/kyc/verifications/ver_456def78-90ab-12cd-34ef-
 }
 ```
 
-**Response (400 Validation Error):**
+**Response (400 Bad Request)**
+
+1. Invalid id parameter
 
 ```json
 {
@@ -513,9 +558,9 @@ curl http://localhost:3000/api/v1/kyc/verifications/ver_52042584-e3ff-43c3-a6f0-
 }
 ```
 
-**Response (400 Validation Error):**
+**Response (400 Bad Request)**
 
-### 1. Invalid status
+1. Invalid status
 
 ```json
 {
@@ -529,7 +574,7 @@ curl http://localhost:3000/api/v1/kyc/verifications/ver_52042584-e3ff-43c3-a6f0-
 }
 ```
 
-### 2. Invalid ID
+2. Invalid id parameter
 
 ```json
 {
