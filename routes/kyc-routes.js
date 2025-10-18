@@ -4,6 +4,7 @@ const {
   getVerificationsHandler,
   getVerificationByIdHandler,
   updateVerificationStatusHandler,
+  deleteVerificationByIdHandler,
 } = require("../controllers/kyc-controller");
 const validateRequest = require("../middleware/validation");
 const {
@@ -57,6 +58,12 @@ router.patch(
   validateRequest(verificationIdSchema, "params"),
   validateRequest(updateStatusSchema, "body"),
   updateVerificationStatusHandler
+);
+
+router.delete(
+  "/verifications/:id",
+  validateRequest(verificationIdSchema, "params"),
+  deleteVerificationByIdHandler
 );
 
 module.exports = router;
