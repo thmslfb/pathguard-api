@@ -46,8 +46,14 @@ const updateMockVerificationStatus = (id, newStatus) => {
   return null;
 };
 
+const deleteMockVerificationById = (id) => {
+  const exists = mockVerifications.some((v) => v.verification_id === id);
+  return exists ? { message: "Verification deleted successfully" } : null;
+};
+
 module.exports = {
   getMockVerifications,
   getMockVerificationById,
   updateMockVerificationStatus,
+  deleteMockVerificationById,
 };
