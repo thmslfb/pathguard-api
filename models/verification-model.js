@@ -39,9 +39,18 @@ const updateVerificationStatusInDB = async (verification_id, new_status) => {
     .returning();
 };
 
+const deleteVerificationByIdFromDB = async (verification_id) => {
+  const result = await db
+    .delete(verifications)
+    .where(eq(verifications.verification_id, verification_id))
+    .returning();
+  return result[0] || null;
+};
+
 module.exports = {
   createVerification,
   getVerificationsFromDB,
   getVerificationByIdFromDB,
   updateVerificationStatusInDB,
+  deleteVerificationByIdFromDB,
 };
