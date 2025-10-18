@@ -5,11 +5,13 @@ const {
   getVerificationsFromDB,
   getVerificationByIdFromDB,
   updateVerificationStatusInDB,
+  deleteVerificationByIdFromDB,
 } = require("../models/verification-model");
 const {
   getMockVerifications,
   getMockVerificationById,
   updateMockVerificationStatus,
+  deleteMockVerificationById,
 } = require("../utils/mock-data");
 
 const LOW_THRESHOLD = parseFloat(process.env.LOW_THRESHOLD) || 0.2;
@@ -69,9 +71,16 @@ const updateVerificationStatus = async (
     : await updateVerificationStatusInDB(id, status);
 };
 
+const deleteVerificationById = async (id, isScalarRequest = false) => {
+  return isScalarRequest
+    ? deleteMockVerificationById(id)
+    : await deleteVerificationByIdFromDB(id);
+};
+
 module.exports = {
   verifyAndSave,
   getVerifications,
   getVerificationById,
   updateVerificationStatus,
+  deleteVerificationById,
 };
